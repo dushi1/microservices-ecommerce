@@ -5,6 +5,9 @@ build/
 coverage/
 *.log
 
+# ── Empty/redundant lockfiles ────────────────────────────────────────────────
+package-lock.json  # ecommerce-micro/package-lock.json is the real one for workspaces
+
 # ── Env & secrets ────────────────────────────────────────────────────────────
 .env
 .env.local

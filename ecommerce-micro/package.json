@@ -1,0 +1,22 @@
+{
+  "name": "ecommerce-micro",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "tsc --build",
+    "dev:storefront": "npm run dev --workspace @ecommerce/storefront",
+    "dev:auth": "npm run dev --workspace @ecommerce/auth-service",
+    "dev:gateway": "npm run dev --workspace @ecommerce/api-gateway"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

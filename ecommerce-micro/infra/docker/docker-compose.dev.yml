@@ -1,0 +1,38 @@
+# Phase-2 dev stack: infrastructure only. Services run locally via `npm run dev` (or your own compose later).
+# One Postgres instance, one database per service (matches plan's database-per-service pattern).
+# In Phase 3 these move to Floci RDS/ElastiCache via Terraform.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecommerce-micro-postgres
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_MULTIPLE_DATABASES: auth_db,product_db,order_db,payment_db,inventory_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d product_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-micro-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:

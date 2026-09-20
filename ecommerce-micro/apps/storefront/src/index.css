@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/* ── Design system: warm gold (amber) primary on cool slate — a calm "luxury
+   retail" lane that dodges the generic blue/indigo SaaS palette. ──────────── */
+
+/* Custom utilities reused across surfaces. */
+@utility card {
+  @apply bg-white border border-slate-200 rounded-xl shadow-sm transition-shadow duration-200;
+}
+@utility panel {
+  @apply bg-white border border-slate-200 rounded-xl p-5 shadow-xs;
+}
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-amber-600 px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-amber-700 hover:shadow-lg hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:translate-y-0;
+}
+@utility btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/50 focus-visible:ring-offset-2;
+}
+@utility input-base {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-800 placeholder:text-slate-400 transition-colors file:rounded-lg file:border-0 file:bg-amber-50 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-amber-800 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 invalid:border-red-400 invalid:focus:ring-red-400/30;
+}
+
+/* ── Keyframes: 3-beat entrance (heartbeat, not flat fade) ────────────── */
+@keyframes toast-in {
+  0% { opacity: 0; transform: translateY(8px) scale(0.98); }
+  60% { transform: translateY(-2px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@utility animate-fade-in {
+  animation: fade-in 0.28s ease-out;
+}
+@utility animate-shimmer {
+  background: linear-gradient(90deg, #f1f1f1 25%, #e5e7eb 50%, #f1f1f1 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* ── Global surface + typography polish ─────────────────────────────── */
+:root {
+  --bg-page: #faf9f7;
+  --bg-subtle: #f5f3f2;
+}
+
+@layer base {
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    @apply bg-[var(--bg-page)] text-slate-800 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Subtle authored background: soft radial grid, never competes with content. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, theme("colors.slate.50") 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: -1;
+  }
+  ::selection { @apply bg-amber-200 text-slate-900; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply rounded-full bg-slate-300; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
+}
+
+/* Custom focus ring used by icon buttons (kept soft, always-visible). */
+@utility ring-focus {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 focus-visible:ring-offset-2;
+}
+
+/* Reduced-motion respect for the entrance + shimmer animations. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-shimmer {
+    animation: none;
+  }
+}

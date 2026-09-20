@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package payment.v1;
+
+service PaymentService {
+  // Called by Order service after inventory reservation succeeds.
+  rpc AuthorizePayment(AuthorizePaymentRequest) returns (AuthorizePaymentResponse);
+  rpc RefundPayment(RefundPaymentRequest) returns (RefundPaymentResponse);
+}
+
+message AuthorizePaymentRequest {
+  string order_id = 1;
+  string user_id = 2;
+  int64 amount_cents = 3;
+  string currency = 4; // ISO 4217, e.g. "USD"
+  string payment_method_id = 5;
+}
+
+message AuthorizePaymentResponse {
+  bool ok = 1;
+  string payment_id = 2;
+  string status = 3; // AUTHORIZED | DECLINED | ERROR
+  string failure_reason = 4; // CARD_DECLINED | INVALID_METHOD | PSP_ERROR
+}
+
+message RefundPaymentRequest {
+  string payment_id = 1;
+  string order_id = 2;
+  int64 amount_cents = 3;
+}
+
+message RefundPaymentResponse {
+  bool ok = 1;
+  string refund_id = 2;
+  string status = 3; // REFUNDED | ERROR
+}
